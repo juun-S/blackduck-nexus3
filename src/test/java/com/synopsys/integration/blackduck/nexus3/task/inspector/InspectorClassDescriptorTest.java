@@ -1,4 +1,4 @@
-package com.synopsys.integration.blackduck.nexus3.task.inspector;
+package com.blackduck.integration.blackduck.nexus3.task.inspector;
 
 import java.util.List;
 

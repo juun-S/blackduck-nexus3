@@ -12,8 +12,8 @@ import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonatype.nexus.repository.storage.Asset;
-import org.sonatype.nexus.repository.storage.Query;
+import org.sonatype.nexus.repository.content.Asset;
+// import org.sonatype.nexus.repository.storage.Query; // Removed
 import org.sonatype.nexus.scheduling.TaskConfiguration;
 import org.sonatype.nexus.scheduling.TaskInterruptedException;
 
@@ -63,10 +63,11 @@ public class RepositoryScanner {
     public void scanRepository() {
         String repoName = scanConfiguration.getRepository().getName();
         logger.info("Checking repository for assets: {}", repoName);
-        Query filteredQuery = commonRepositoryTaskHelper.createPagedQuery(Optional.empty()).build();
-        PagedResult<Asset> foundAssets = commonRepositoryTaskHelper.retrievePagedAssets(scanConfiguration.getRepository(), filteredQuery);
+        // Query filteredQuery = commonRepositoryTaskHelper.createPagedQuery(Optional.empty()).build(); // Removed
+        PagedResult<Asset> foundAssets = commonRepositoryTaskHelper.retrievePagedAssets(scanConfiguration.getRepository(), null);
 
-        while (foundAssets.hasResults()) {
+        // Loop removed because retrievePagedAssets returns all assets.
+        if (foundAssets.hasResults()) {
             Iterable<Asset> assetsTypeList = foundAssets.getTypeList();
             int assetCount = IterableUtils.size(assetsTypeList);
             logger.info("Found {} assets to possibly scan.", assetCount);
@@ -89,8 +90,8 @@ public class RepositoryScanner {
             } else {
                 logger.error("Scan Configuration has errors");
             }
-            Query nextPageQuery = commonRepositoryTaskHelper.createPagedQuery(foundAssets.getLastName()).build();
-            foundAssets = commonRepositoryTaskHelper.retrievePagedAssets(scanConfiguration.getRepository(), nextPageQuery);
+            // Query nextPageQuery = commonRepositoryTaskHelper.createPagedQuery(foundAssets.getLastName()).build();
+            // foundAssets = commonRepositoryTaskHelper.retrievePagedAssets(scanConfiguration.getRepository(), nextPageQuery);
         }
 
     }

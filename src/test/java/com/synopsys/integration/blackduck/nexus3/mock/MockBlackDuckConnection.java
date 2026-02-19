@@ -1,11 +1,11 @@
-package com.synopsys.integration.blackduck.nexus3.mock;
+package com.blackduck.integration.blackduck.nexus3.mock;
 
-import com.synopsys.integration.blackduck.configuration.BlackDuckServerConfig;
-import com.synopsys.integration.blackduck.configuration.BlackDuckServerConfigBuilder;
-import com.synopsys.integration.blackduck.nexus3.BlackDuckConnection;
-import com.synopsys.integration.exception.IntegrationException;
-import com.synopsys.integration.test.TestProperties;
-import com.synopsys.integration.test.TestPropertyKey;
+import com.blackduck.integration.blackduck.configuration.BlackDuckServerConfig;
+import com.blackduck.integration.blackduck.configuration.BlackDuckServerConfigBuilder;
+import com.blackduck.integration.blackduck.nexus3.BlackDuckConnection;
+import com.blackduck.integration.exception.IntegrationException;
+import com.blackduck.integration.test.TestProperties;
+import com.blackduck.integration.test.TestPropertyKey;
 
 public class MockBlackDuckConnection extends BlackDuckConnection {
 

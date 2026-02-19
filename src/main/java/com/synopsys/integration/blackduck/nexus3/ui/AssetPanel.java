@@ -24,7 +24,7 @@
 package com.synopsys.integration.blackduck.nexus3.ui;
 
 import org.sonatype.nexus.common.collect.NestedAttributesMap;
-import org.sonatype.nexus.repository.storage.Asset;
+import org.sonatype.nexus.repository.content.Asset;
 
 public class AssetPanel {
     public static final String BLACKDUCK_CATEGORY = "BlackDuck";

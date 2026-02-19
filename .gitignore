@@ -1,18 +1,18 @@
-# build tool
-.gradle/
-build/
 target/
-
-# operating system
-.DS_Store
-
-# ide
-.settings/
-.classpath
-.project
-bin/
-.idea
-out/
 *.iml
-
-src/test/resources/test.properties
+.idea/
+.vscode/
+*.log
+*.class
+.DS_Store
+out/
+build/
+.gradle/
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+nexusInfo/sysinfo.json

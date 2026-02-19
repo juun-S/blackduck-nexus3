@@ -1,4 +1,4 @@
-package com.synopsys.integration.blackduck.nexus3.capability;
+package com.blackduck.integration.blackduck.nexus3.capability;
 
 import java.util.HashMap;
 import java.util.List;

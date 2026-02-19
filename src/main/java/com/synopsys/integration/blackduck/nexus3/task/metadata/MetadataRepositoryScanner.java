@@ -9,8 +9,8 @@ import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonatype.nexus.repository.storage.Asset;
-import org.sonatype.nexus.repository.storage.Query;
+import org.sonatype.nexus.repository.content.Asset;
+// import org.sonatype.nexus.repository.storage.Query; // Removed
 import org.sonatype.nexus.scheduling.TaskInterruptedException;
 
 import com.synopsys.integration.blackduck.api.generated.view.ProjectVersionView;
@@ -57,17 +57,20 @@ public class MetadataRepositoryScanner {
 
     public void scanRepository() {
         String repoName = metaDataScanConfiguration.getRepository().getName();
-        Query filteredAssets = createFilteredQuery(Optional.empty());
-        PagedResult<Asset> pagedAssets = commonRepositoryTaskHelper.retrievePagedAssets(metaDataScanConfiguration.getRepository(), filteredAssets);
+        String repoName = metaDataScanConfiguration.getRepository().getName();
+        // Query filteredAssets = createFilteredQuery(Optional.empty()); // Removed
+        PagedResult<Asset> pagedAssets = commonRepositoryTaskHelper.retrievePagedAssets(metaDataScanConfiguration.getRepository(), null);
         Map<String, AssetWrapper> assetWrapperMap = new HashMap<>();
         Map<String, AssetWrapper> assetWrapperToWaitFor = new HashMap<>();
-        while (pagedAssets.hasResults()) {
+        
+        // Loop removed because retrievePagedAssets returns all assets.
+        if (pagedAssets.hasResults()) {
             logger.debug("Found items in the DB.");
             for (Asset asset : pagedAssets.getTypeList()) {
                 updateAsset(asset, repoName, assetWrapperToWaitFor, assetWrapperMap);
             }
-            Query nextPage = createFilteredQuery(pagedAssets.getLastName());
-            pagedAssets = commonRepositoryTaskHelper.retrievePagedAssets(metaDataScanConfiguration.getRepository(), nextPage);
+            // Query nextPage = createFilteredQuery(pagedAssets.getLastName());
+            // pagedAssets = commonRepositoryTaskHelper.retrievePagedAssets(metaDataScanConfiguration.getRepository(), nextPage);
         }
 
         if (!assetWrapperToWaitFor.isEmpty() && !metaDataScanConfiguration.hasErrors()) {
@@ -215,6 +218,7 @@ public class MetadataRepositoryScanner {
         assetWrapper.updateAsset();
     }
 
+    /*
     private Query createFilteredQuery(Optional<String> lastNameUsed) {
         Query.Builder pagedQueryBuilder = commonRepositoryTaskHelper.createPagedQuery(lastNameUsed);
         String statusPath = commonRepositoryTaskHelper.getBlackDuckPanelPath(metaDataScanConfiguration.getAssetStatusLabel());
@@ -236,6 +240,7 @@ public class MetadataRepositoryScanner {
 
         return statusWhere.toString();
     }
+    */
 
     private String createEqualsStatement(String object, String value) {
         StringBuilder equalsStatement = new StringBuilder();

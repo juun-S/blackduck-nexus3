@@ -1,4 +1,4 @@
-package com.synopsys.integration.blackduck.nexus3.task;
+package com.blackduck.integration.blackduck.nexus3.task;
 
 import java.util.HashMap;
 
@@ -13,10 +13,10 @@ import org.sonatype.nexus.repository.storage.Asset;
 import org.sonatype.nexus.repository.storage.Component;
 import org.sonatype.nexus.repository.storage.MetadataNodeEntityAdapter;
 
-import com.synopsys.integration.blackduck.nexus3.database.QueryManager;
-import com.synopsys.integration.blackduck.nexus3.ui.AssetPanel;
-import com.synopsys.integration.blackduck.nexus3.ui.AssetPanelLabel;
-import com.synopsys.integration.exception.IntegrationException;
+import com.blackduck.integration.blackduck.nexus3.database.QueryManager;
+import com.blackduck.integration.blackduck.nexus3.ui.AssetPanel;
+import com.blackduck.integration.blackduck.nexus3.ui.AssetPanelLabel;
+import com.blackduck.integration.exception.IntegrationException;
 
 public class AssetWrapperTest extends TestSupport {
 

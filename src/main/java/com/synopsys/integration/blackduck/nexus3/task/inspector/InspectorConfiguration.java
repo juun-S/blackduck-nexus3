@@ -6,18 +6,16 @@ import org.sonatype.nexus.repository.Repository;
 import com.synopsys.integration.blackduck.codelocation.CodeLocationCreationService;
 import com.synopsys.integration.blackduck.codelocation.bdioupload.BdioUploadService;
 import com.synopsys.integration.blackduck.nexus3.task.inspector.dependency.DependencyType;
-import com.synopsys.integration.blackduck.service.BlackDuckService;
-import com.synopsys.integration.blackduck.service.ComponentService;
-import com.synopsys.integration.blackduck.service.ProjectBomService;
-import com.synopsys.integration.blackduck.service.ProjectService;
+import com.synopsys.integration.blackduck.service.BlackDuckApiClient;
+import com.synopsys.integration.blackduck.service.dataservice.ComponentService;
+import com.synopsys.integration.blackduck.service.dataservice.ProjectBomService;
+import com.synopsys.integration.blackduck.service.dataservice.ProjectService;
 
 public class InspectorConfiguration {
     private final String exceptionMessage;
 
-    private final Repository repository;
     private final DependencyType dependencyType;
-
-    private final BlackDuckService blackDuckService;
+    private final BlackDuckApiClient blackDuckApiClient;
     private final ComponentService componentService;
     private final ProjectService projectService;
     private final CodeLocationCreationService codeLocationCreationService;
@@ -28,17 +26,17 @@ public class InspectorConfiguration {
         return new InspectorConfiguration(exceptionMessage, repository, dependencyType, null, null, null, null, null, null);
     }
 
-    public static InspectorConfiguration createConfiguration(Repository repository, DependencyType dependencyType, BlackDuckService blackDuckService, ComponentService componentService,
+    public static InspectorConfiguration createConfiguration(Repository repository, DependencyType dependencyType, BlackDuckApiClient blackDuckApiClient, ComponentService componentService,
         ProjectService projectService, CodeLocationCreationService codeLocationCreationService, BdioUploadService bdioUploadService, ProjectBomService projectBomService) {
-        return new InspectorConfiguration(null, repository, dependencyType, blackDuckService, componentService, projectService, codeLocationCreationService, bdioUploadService, projectBomService);
+        return new InspectorConfiguration(null, repository, dependencyType, blackDuckApiClient, componentService, projectService, codeLocationCreationService, bdioUploadService, projectBomService);
     }
 
-    public InspectorConfiguration(String exceptionMessage, Repository repository, DependencyType dependencyType, BlackDuckService blackDuckService, ComponentService componentService,
+    public InspectorConfiguration(String exceptionMessage, Repository repository, DependencyType dependencyType, BlackDuckApiClient blackDuckApiClient, ComponentService componentService,
         ProjectService projectService, CodeLocationCreationService codeLocationCreationService, BdioUploadService bdioUploadService, ProjectBomService projectBomService) {
         this.exceptionMessage = exceptionMessage;
         this.repository = repository;
         this.dependencyType = dependencyType;
-        this.blackDuckService = blackDuckService;
+        this.blackDuckApiClient = blackDuckApiClient;
         this.componentService = componentService;
         this.projectService = projectService;
         this.codeLocationCreationService = codeLocationCreationService;
@@ -47,7 +45,7 @@ public class InspectorConfiguration {
     }
 
     public boolean hasErrors() {
-        return StringUtils.isNotBlank(exceptionMessage) || null == blackDuckService || null == projectService || null == codeLocationCreationService || null == bdioUploadService || null == projectBomService;
+        return StringUtils.isNotBlank(exceptionMessage) || null == blackDuckApiClient || null == projectService || null == codeLocationCreationService || null == bdioUploadService || null == projectBomService;
     }
 
     public String getExceptionMessage() {
@@ -62,8 +60,8 @@ public class InspectorConfiguration {
         return dependencyType;
     }
 
-    public BlackDuckService getBlackDuckService() {
-        return blackDuckService;
+    public BlackDuckApiClient getBlackDuckApiClient() {
+        return blackDuckApiClient;
     }
 
     public ComponentService getComponentService() {

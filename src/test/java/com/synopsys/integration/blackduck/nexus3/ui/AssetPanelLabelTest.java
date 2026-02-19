@@ -1,4 +1,4 @@
-package com.synopsys.integration.blackduck.nexus3.ui;
+package com.blackduck.integration.blackduck.nexus3.ui;
 
 import org.junit.Assert;
 import org.junit.Test;

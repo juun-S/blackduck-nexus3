@@ -1,4 +1,4 @@
-package com.synopsys.integration.blackduck.nexus3.database;
+package com.blackduck.integration.blackduck.nexus3.database;
 
 import java.util.Arrays;
 import java.util.Iterator;

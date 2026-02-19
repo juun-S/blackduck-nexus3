@@ -1,4 +1,4 @@
-package com.synopsys.integration.blackduck.nexus3.mock.model;
+package com.blackduck.integration.blackduck.nexus3.mock.model;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,7 +12,7 @@ import org.sonatype.nexus.blobstore.api.BlobId;
 import org.sonatype.nexus.blobstore.api.BlobMetrics;
 import org.sonatype.nexus.blobstore.api.BlobStore;
 
-import com.synopsys.integration.test.TestResourceLoader;
+import com.blackduck.integration.test.TestResourceLoader;
 
 public class MockBlob implements Blob {
     public static final String NEXUS_JAR = "nexus3Test.jar";

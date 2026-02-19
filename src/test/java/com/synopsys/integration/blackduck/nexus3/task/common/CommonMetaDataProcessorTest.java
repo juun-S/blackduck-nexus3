@@ -1,4 +1,4 @@
-package com.synopsys.integration.blackduck.nexus3.task.common;
+package com.blackduck.integration.blackduck.nexus3.task.common;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -11,15 +11,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.synopsys.integration.blackduck.api.generated.component.ComponentVersionRiskProfileRiskDataCountsView;
-import com.synopsys.integration.blackduck.api.generated.enumeration.ComponentVersionRiskProfileRiskDataCountsCountTypeType;
-import com.synopsys.integration.blackduck.api.generated.enumeration.PolicyStatusType;
-import com.synopsys.integration.blackduck.api.generated.enumeration.PolicySummaryStatusType;
-import com.synopsys.integration.blackduck.api.generated.view.ProjectVersionPolicyStatusView;
-import com.synopsys.integration.blackduck.api.manual.throwaway.generated.component.NameValuePairView;
-import com.synopsys.integration.blackduck.nexus3.mock.model.MockAsset;
-import com.synopsys.integration.blackduck.nexus3.task.AssetWrapper;
-import com.synopsys.integration.blackduck.nexus3.ui.AssetPanelLabel;
+import com.blackduck.integration.blackduck.api.generated.component.ComponentVersionRiskProfileRiskDataCountsView;
+import com.blackduck.integration.blackduck.api.generated.enumeration.ComponentVersionRiskProfileRiskDataCountsCountTypeType;
+import com.blackduck.integration.blackduck.api.generated.enumeration.PolicyStatusType;
+import com.blackduck.integration.blackduck.api.generated.enumeration.PolicySummaryStatusType;
+import com.blackduck.integration.blackduck.api.generated.view.ProjectVersionPolicyStatusView;
+import com.blackduck.integration.blackduck.api.manual.throwaway.generated.component.NameValuePairView;
+import com.blackduck.integration.blackduck.nexus3.mock.model.MockAsset;
+import com.blackduck.integration.blackduck.nexus3.task.AssetWrapper;
+import com.blackduck.integration.blackduck.nexus3.ui.AssetPanelLabel;
 
 public class CommonMetaDataProcessorTest {
 

@@ -1,16 +1,16 @@
-package com.synopsys.integration.blackduck.nexus3.task.common;
+package com.blackduck.integration.blackduck.nexus3.task.common;
 
 import java.net.URL;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.synopsys.integration.blackduck.configuration.BlackDuckServerConfig;
-import com.synopsys.integration.blackduck.nexus3.mock.MockBlackDuckConnection;
-import com.synopsys.integration.blackduck.service.BlackDuckServicesFactory;
-import com.synopsys.integration.exception.IntegrationException;
-import com.synopsys.integration.test.TestProperties;
-import com.synopsys.integration.test.TestPropertyKey;
+import com.blackduck.integration.blackduck.configuration.BlackDuckServerConfig;
+import com.blackduck.integration.blackduck.nexus3.mock.MockBlackDuckConnection;
+import com.blackduck.integration.blackduck.service.BlackDuckServicesFactory;
+import com.blackduck.integration.exception.IntegrationException;
+import com.blackduck.integration.test.TestProperties;
+import com.blackduck.integration.test.TestPropertyKey;
 
 public class CommonRepositoryTaskHelperTestIT {
 

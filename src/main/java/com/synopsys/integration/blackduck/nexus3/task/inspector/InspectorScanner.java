@@ -12,8 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonatype.nexus.repository.storage.Asset;
-import org.sonatype.nexus.repository.storage.Query;
+import org.sonatype.nexus.repository.content.Asset;
+// import org.sonatype.nexus.repository.storage.Query; // Removed
 import org.sonatype.nexus.scheduling.TaskConfiguration;
 import org.sonatype.nexus.scheduling.TaskInterruptedException;
 
@@ -32,9 +32,10 @@ import com.synopsys.integration.blackduck.nexus3.task.inspector.dependency.Depen
 import com.synopsys.integration.blackduck.nexus3.task.inspector.model.TemporaryOriginView;
 import com.synopsys.integration.blackduck.nexus3.task.inspector.wait.ComponentLinkWaitJob;
 import com.synopsys.integration.blackduck.nexus3.ui.AssetPanelLabel;
-import com.synopsys.integration.blackduck.service.BlackDuckService;
-import com.synopsys.integration.blackduck.service.ComponentService;
-import com.synopsys.integration.blackduck.service.ProjectBomService;
+import com.synopsys.integration.blackduck.nexus3.ui.AssetPanelLabel;
+import com.synopsys.integration.blackduck.service.BlackDuckApiClient;
+import com.synopsys.integration.blackduck.service.dataservice.ComponentService;
+import com.synopsys.integration.blackduck.service.dataservice.ProjectBomService;
 import com.synopsys.integration.exception.IntegrationException;
 import com.synopsys.integration.log.Slf4jIntLogger;
 import com.synopsys.integration.rest.RestConstants;
@@ -77,11 +78,11 @@ public class InspectorScanner {
 
         String repositoryName = inspectorConfiguration.getRepository().getName();
         logger.info("Checking repository for assets: {}", repositoryName);
-        Query pagedQuery = commonRepositoryTaskHelper.createPagedQuery(Optional.empty()).build();
-        PagedResult<Asset> filteredAssets = commonRepositoryTaskHelper.retrievePagedAssets(inspectorConfiguration.getRepository(), pagedQuery);
+        // Query usage removed. retrievePagedAssets returns all assets now.
+        PagedResult<Asset> filteredAssets = commonRepositoryTaskHelper.retrievePagedAssets(inspectorConfiguration.getRepository(), null);
         ProjectVersionView projectVersionView = getProjectVersion(repositoryName);
 
-        while (filteredAssets.hasResults()) {
+        if (filteredAssets.hasResults()) {
             Map<String, AssetWrapper> originIdToAsset = new HashMap<>();
             Iterable<Asset> assetsTypeList = filteredAssets.getTypeList();
             int assetCount = IterableUtils.size(assetsTypeList);
@@ -93,7 +94,7 @@ public class InspectorScanner {
                     commonRepositoryTaskHelper.failedConnection(assetWrapper, inspectorConfiguration.getExceptionMessage());
                     assetWrapper.updateAsset();
                 } else {
-                    processAsset(inspectorConfiguration.getProjectBomService(), inspectorConfiguration.getComponentService(), inspectorConfiguration.getBlackDuckService(), projectVersionView, assetWrapper,
+                    processAsset(inspectorConfiguration.getProjectBomService(), inspectorConfiguration.getComponentService(), inspectorConfiguration.getBlackDuckApiClient(), projectVersionView, assetWrapper,
                         inspectorConfiguration.getDependencyType(), originIdToAsset);
                 }
             }
@@ -105,12 +106,11 @@ public class InspectorScanner {
                 logger.debug(e.getMessage(), e);
                 updateErrorStatus(originIdToAsset.values(), e.getMessage());
             }
-            Query nextPage = commonRepositoryTaskHelper.createPagedQuery(filteredAssets.getLastName()).build();
-            filteredAssets = commonRepositoryTaskHelper.retrievePagedAssets(inspectorConfiguration.getRepository(), nextPage);
+            // No pagination loop currently supported with Content API migration
         }
     }
 
-    private void processAsset(ProjectBomService projectBomService, ComponentService componentService, BlackDuckService blackDuckService, ProjectVersionView projectVersionView,
+    private void processAsset(ProjectBomService projectBomService, ComponentService componentService, BlackDuckApiClient blackDuckApiClient, ProjectVersionView projectVersionView,
         AssetWrapper assetWrapper, DependencyType dependencyType, Map<String, AssetWrapper> originIdToAsset) {
         String name = assetWrapper.getName();
         String version = assetWrapper.getVersion();
@@ -133,11 +133,11 @@ public class InspectorScanner {
         }
         logger.debug("Inspecting item: {}, version: {}, path: {}", name, version, fullPathName);
         ExternalId externalId = dependencyGenerator.createExternalId(dependencyType, name, version, assetWrapper.getAsset().attributes());
-        addAssetToBlackDuckProjectVersion(projectBomService, componentService, blackDuckService, projectVersionView, externalId, assetWrapper, originIdToAsset);
+        addAssetToBlackDuckProjectVersion(projectBomService, componentService, blackDuckApiClient, projectVersionView, externalId, assetWrapper, originIdToAsset);
         assetWrapper.updateAsset();
     }
 
-    private void addAssetToBlackDuckProjectVersion(ProjectBomService projectBomService, ComponentService componentService, BlackDuckService blackDuckService, ProjectVersionView projectVersionView, ExternalId externalId,
+    private void addAssetToBlackDuckProjectVersion(ProjectBomService projectBomService, ComponentService componentService, BlackDuckApiClient blackDuckApiClient, ProjectVersionView projectVersionView, ExternalId externalId,
         AssetWrapper assetWrapper, Map<String, AssetWrapper> originIdToAsset) {
         String assetName = assetWrapper.getName();
         String assetVersion = assetWrapper.getVersion();
@@ -148,7 +148,7 @@ public class InspectorScanner {
             } else {
                 String componentURL = componentURLOptional.get();
                 // the response should be com.synopsys.integration.blackduck.api.generated.view.OriginView but the API of OriginView is incorrect so Gson can not convert the response to this class
-                TemporaryOriginView originView = blackDuckService.getResponse(componentURL, TemporaryOriginView.class);
+                TemporaryOriginView originView = blackDuckApiClient.getResponse(new com.synopsys.integration.rest.HttpUrl(componentURL), TemporaryOriginView.class);
                 String originId = originView.getOriginId();
                 assetWrapper.addPendingToBlackDuckPanel("Asset waiting to be uploaded to Black Duck.");
                 assetWrapper.addToBlackDuckAssetPanel(AssetPanelLabel.ASSET_ORIGIN_ID, originId);
@@ -195,14 +195,14 @@ public class InspectorScanner {
         ProjectVersionView projectVersionView;
         try {
             logger.debug("Creating Project Version in Black Duck: {}", repositoryName);
-            projectVersionView = inspectorMetaDataProcessor.getOrCreateProjectVersion(inspectorConfiguration.getBlackDuckService(), inspectorConfiguration.getProjectService(), repositoryName);
+            projectVersionView = inspectorMetaDataProcessor.getOrCreateProjectVersion(inspectorConfiguration.getBlackDuckApiClient(), inspectorConfiguration.getProjectService(), repositoryName);
             // wait for Black Duck to process the Project Version creation so that the components link will be available
             String projectVersionViewHref = projectVersionView.getHref().orElseThrow(() -> new IntegrationException("Could not get the Href for the Black Duck Project Version."));
 
             boolean projectVersionHasComponentsLink = projectVersionView.hasLink(ProjectVersionView.COMPONENTS_LINK);
             if (!projectVersionHasComponentsLink) {
                 logger.info("Waiting for the components link to be available for the Black Duck Project Version: {}:{}", repositoryName, projectVersionView.getVersionName());
-                ComponentLinkWaitJob componentLinkWaitJob = new ComponentLinkWaitJob(projectVersionViewHref, inspectorConfiguration.getBlackDuckService());
+                ComponentLinkWaitJob componentLinkWaitJob = new ComponentLinkWaitJob(projectVersionViewHref, inspectorConfiguration.getBlackDuckApiClient());
                 Long startTime = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
                 WaitJob waitForNotificationToBeProcessed = WaitJob.create(new Slf4jIntLogger(logger), 600, startTime, 30, componentLinkWaitJob);
                 boolean isComplete = waitForNotificationToBeProcessed.waitFor();

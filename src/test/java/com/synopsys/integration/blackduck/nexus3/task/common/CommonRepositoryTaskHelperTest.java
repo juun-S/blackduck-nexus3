@@ -1,4 +1,4 @@
-package com.synopsys.integration.blackduck.nexus3.task.common;
+package com.blackduck.integration.blackduck.nexus3.task.common;
 
 import java.io.File;
 import java.util.Collections;
@@ -14,10 +14,10 @@ import org.sonatype.nexus.repository.storage.Asset;
 import org.sonatype.nexus.repository.storage.Query;
 import org.sonatype.nexus.scheduling.TaskConfiguration;
 
-import com.synopsys.integration.blackduck.nexus3.database.PagedResult;
-import com.synopsys.integration.blackduck.nexus3.mock.MockQueryManager;
-import com.synopsys.integration.blackduck.nexus3.mock.model.MockAsset;
-import com.synopsys.integration.blackduck.nexus3.ui.AssetPanelLabel;
+import com.blackduck.integration.blackduck.nexus3.database.PagedResult;
+import com.blackduck.integration.blackduck.nexus3.mock.MockQueryManager;
+import com.blackduck.integration.blackduck.nexus3.mock.model.MockAsset;
+import com.blackduck.integration.blackduck.nexus3.ui.AssetPanelLabel;
 
 public class CommonRepositoryTaskHelperTest {
 

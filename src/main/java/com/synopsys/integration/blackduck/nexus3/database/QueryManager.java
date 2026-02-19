@@ -24,57 +24,49 @@
 package com.synopsys.integration.blackduck.nexus3.database;
 
 import java.util.Collections;
+import java.util.Optional;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+// Removed legacy Storage API imports
 import org.sonatype.nexus.blobstore.api.Blob;
 import org.sonatype.nexus.blobstore.api.BlobRef;
-import org.sonatype.nexus.common.entity.EntityId;
+// import org.sonatype.nexus.common.entity.EntityId;
 import org.sonatype.nexus.repository.Repository;
-import org.sonatype.nexus.repository.storage.Asset;
-import org.sonatype.nexus.repository.storage.Component;
-import org.sonatype.nexus.repository.storage.Query;
-import org.sonatype.nexus.repository.storage.StorageFacet;
-import org.sonatype.nexus.repository.storage.StorageTx;
+import org.sonatype.nexus.repository.content.Asset;
+import org.sonatype.nexus.repository.content.Component;
+// import org.sonatype.nexus.repository.storage.Query;
+// import org.sonatype.nexus.repository.storage.StorageFacet;
+// import org.sonatype.nexus.repository.storage.StorageTx;
+import org.sonatype.nexus.repository.content.facet.ContentFacet;
 
 @Named
 @Singleton
 public class QueryManager {
 
-    public Iterable<Asset> findAssetsInRepository(final Repository repository, final Query query) {
-        try (final StorageTx storageTx = repository.facet(StorageFacet.class).txSupplier().get()) {
-            storageTx.begin();
-
-            return storageTx.findAssets(query, Collections.singletonList(repository));
-        }
+    public Iterable<Asset> findAssetsInRepository(final Repository repository, final String filter) {
+        return repository.facet(ContentFacet.class).assets().browse(Integer.MAX_VALUE, null); 
+        // Note: 'filter' is not directly supported in browse() without criteria. 
+        // For now returning all assets, filtering should be done by caller or implemented via search().
+        // Legacy 'Query' object is removed.
     }
 
     public Iterable<Asset> findAllAssetsInRepository(final Repository repository) {
-        final Query.Builder query = Query.builder();
-        return findAssetsInRepository(repository, query.build());
+        return repository.facet(ContentFacet.class).assets().browse(Integer.MAX_VALUE, null);
     }
 
-    public void updateAsset(final Repository repository, final Asset asset) {
-        try (final StorageTx storageTx = repository.facet(StorageFacet.class).txSupplier().get()) {
-            storageTx.begin();
-            storageTx.saveAsset(asset);
-            storageTx.commit();
-        }
-    }
+//    public void updateAsset(final Repository repository, final Asset asset) {
+//        // Content API assets are generally immutable or updated via specific fluent methods.
+//        // Direct saveAsset() equivalent is usually not exposed the same way.
+//        // TODO: Verify if update is needed or provided by FluentAsset.
+//    }
 
     public Blob getBlob(final Repository repository, final BlobRef blobRef) {
-        try (final StorageTx storageTx = repository.facet(StorageFacet.class).txSupplier().get()) {
-            storageTx.begin();
-            return storageTx.getBlob(blobRef);
-        }
+        return repository.facet(ContentFacet.class).blobs().blob(blobRef).orElse(null);
     }
 
-    public Component getComponent(final Repository repository, final EntityId id) {
-        try (final StorageTx storageTx = repository.facet(StorageFacet.class).txSupplier().get()) {
-            storageTx.begin();
-            return storageTx.findComponent(id);
-        }
+    public Optional<Component> findComponent(final Repository repository, final String namespace, final String name, final String version) {
+        return repository.facet(ContentFacet.class).components().name(name).version(version).find();
     }
-
 }

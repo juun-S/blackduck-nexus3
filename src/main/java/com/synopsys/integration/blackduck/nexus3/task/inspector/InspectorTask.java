@@ -42,11 +42,11 @@ import com.synopsys.integration.blackduck.nexus3.task.common.CommonRepositoryTas
 import com.synopsys.integration.blackduck.nexus3.task.common.CommonTaskFilters;
 import com.synopsys.integration.blackduck.nexus3.task.inspector.dependency.DependencyGenerator;
 import com.synopsys.integration.blackduck.nexus3.task.inspector.dependency.DependencyType;
-import com.synopsys.integration.blackduck.service.BlackDuckService;
+import com.synopsys.integration.blackduck.service.BlackDuckApiClient;
 import com.synopsys.integration.blackduck.service.BlackDuckServicesFactory;
-import com.synopsys.integration.blackduck.service.ComponentService;
-import com.synopsys.integration.blackduck.service.ProjectBomService;
-import com.synopsys.integration.blackduck.service.ProjectService;
+import com.synopsys.integration.blackduck.service.dataservice.ComponentService;
+import com.synopsys.integration.blackduck.service.dataservice.ProjectBomService;
+import com.synopsys.integration.blackduck.service.dataservice.ProjectService;
 import com.synopsys.integration.exception.IntegrationException;
 import com.synopsys.integration.phonehome.PhoneHomeResponse;
 
@@ -74,7 +74,7 @@ public class InspectorTask extends RepositoryTaskSupport {
     @Override
     protected void execute(Repository repository) {
         String exceptionMessage = null;
-        BlackDuckService blackDuckService = null;
+        BlackDuckApiClient blackDuckApiClient = null;
         ComponentService componentService = null;
         ProjectService projectService = null;
         CodeLocationCreationService codeLocationCreationService = null;
@@ -83,7 +83,7 @@ public class InspectorTask extends RepositoryTaskSupport {
         Optional<PhoneHomeResponse> phoneHomeResponse = Optional.empty();
         try {
             BlackDuckServicesFactory blackDuckServicesFactory = commonRepositoryTaskHelper.getBlackDuckServicesFactory();
-            blackDuckService = blackDuckServicesFactory.createBlackDuckService();
+            blackDuckApiClient = blackDuckServicesFactory.getBlackDuckApiClient();
             componentService = blackDuckServicesFactory.createComponentService();
             projectService = blackDuckServicesFactory.createProjectService();
             codeLocationCreationService = blackDuckServicesFactory.createCodeLocationCreationService();
@@ -105,7 +105,7 @@ public class InspectorTask extends RepositoryTaskSupport {
                 if (StringUtils.isNotBlank(exceptionMessage)) {
                     inspectorConfiguration = InspectorConfiguration.createConfigurationWithError(exceptionMessage, repository, dependencyType);
                 } else {
-                    inspectorConfiguration = InspectorConfiguration.createConfiguration(repository, dependencyType, blackDuckService, componentService, projectService, codeLocationCreationService, bdioUploadService, projectBomService);
+                    inspectorConfiguration = InspectorConfiguration.createConfiguration(repository, dependencyType, blackDuckApiClient, componentService, projectService, codeLocationCreationService, bdioUploadService, projectBomService);
                 }
                 InspectorScanner inspectorScanner = new InspectorScanner(commonRepositoryTaskHelper, dateTimeParser, dependencyGenerator, inspectorMetaDataProcessor, commonTaskFilters, taskConfiguration(), inspectorConfiguration);
                 inspectorScanner.inspectRepository();

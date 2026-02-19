@@ -1,4 +1,4 @@
-package com.synopsys.integration.blackduck.nexus3.task.metadata;
+package com.blackduck.integration.blackduck.nexus3.task.metadata;
 
 import java.util.List;
 

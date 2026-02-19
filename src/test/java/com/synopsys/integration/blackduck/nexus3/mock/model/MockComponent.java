@@ -1,4 +1,4 @@
-package com.synopsys.integration.blackduck.nexus3.mock.model;
+package com.blackduck.integration.blackduck.nexus3.mock.model;
 
 import javax.annotation.Nullable;
 

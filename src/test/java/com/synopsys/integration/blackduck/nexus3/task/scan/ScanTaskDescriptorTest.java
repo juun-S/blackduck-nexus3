@@ -1,4 +1,4 @@
-package com.synopsys.integration.blackduck.nexus3.task.scan;
+package com.blackduck.integration.blackduck.nexus3.task.scan;
 
 import java.util.List;
 

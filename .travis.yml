@@ -14,8 +14,8 @@ jdk:
 notifications:
   email:
     recipients:
-      - jrichard@synopsys.com
-      - bmandel@synopsys.com
+      - jrichard@blackduck.com
+      - bmandel@blackduck.com
 
 script:
   - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar

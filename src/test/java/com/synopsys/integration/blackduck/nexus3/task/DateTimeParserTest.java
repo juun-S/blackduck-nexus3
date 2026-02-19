@@ -1,4 +1,4 @@
-package com.synopsys.integration.blackduck.nexus3.task;
+package com.blackduck.integration.blackduck.nexus3.task;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;

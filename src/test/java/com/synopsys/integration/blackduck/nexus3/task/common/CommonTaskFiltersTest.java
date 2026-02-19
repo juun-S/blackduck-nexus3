@@ -1,4 +1,4 @@
-package com.synopsys.integration.blackduck.nexus3.task.common;
+package com.blackduck.integration.blackduck.nexus3.task.common;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -17,9 +17,9 @@ import org.sonatype.nexus.repository.Type;
 import org.sonatype.nexus.repository.group.GroupFacet;
 import org.sonatype.nexus.scheduling.TaskConfiguration;
 
-import com.synopsys.integration.blackduck.nexus3.task.AssetWrapper;
-import com.synopsys.integration.blackduck.nexus3.task.DateTimeParser;
-import com.synopsys.integration.exception.IntegrationException;
+import com.blackduck.integration.blackduck.nexus3.task.AssetWrapper;
+import com.blackduck.integration.blackduck.nexus3.task.DateTimeParser;
+import com.blackduck.integration.exception.IntegrationException;
 
 public class CommonTaskFiltersTest extends TestSupport {
 

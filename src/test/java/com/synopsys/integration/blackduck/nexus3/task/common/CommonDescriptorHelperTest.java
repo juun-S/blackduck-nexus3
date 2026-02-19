@@ -1,4 +1,4 @@
-package com.synopsys.integration.blackduck.nexus3.task.common;
+package com.blackduck.integration.blackduck.nexus3.task.common;
 
 import org.junit.Assert;
 import org.junit.Test;

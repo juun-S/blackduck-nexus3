@@ -1,4 +1,4 @@
-package com.synopsys.integration.blackduck.nexus3.capability;
+package com.blackduck.integration.blackduck.nexus3.capability;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,9 +6,9 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.synopsys.integration.blackduck.configuration.BlackDuckServerConfig;
-import com.synopsys.integration.test.TestProperties;
-import com.synopsys.integration.test.TestPropertyKey;
+import com.blackduck.integration.blackduck.configuration.BlackDuckServerConfig;
+import com.blackduck.integration.test.TestProperties;
+import com.blackduck.integration.test.TestPropertyKey;
 
 public class BlackDuckCapabilityConfigurationTestIT {
 

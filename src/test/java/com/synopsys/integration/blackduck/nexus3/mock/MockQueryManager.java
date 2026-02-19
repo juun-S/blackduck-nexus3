@@ -1,4 +1,4 @@
-package com.synopsys.integration.blackduck.nexus3.mock;
+package com.blackduck.integration.blackduck.nexus3.mock;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import org.sonatype.nexus.repository.storage.Asset;
 import org.sonatype.nexus.repository.storage.Component;
 import org.sonatype.nexus.repository.storage.Query;
 
-import com.synopsys.integration.blackduck.nexus3.database.QueryManager;
+import com.blackduck.integration.blackduck.nexus3.database.QueryManager;
 
 public class MockQueryManager extends QueryManager {
     List<Asset> dbAssets;

@@ -1,4 +1,4 @@
-package com.synopsys.integration.blackduck.nexus3.task.inspector.dependency;
+package com.blackduck.integration.blackduck.nexus3.task.inspector.dependency;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -8,8 +8,8 @@ import org.junit.Test;
 import org.sonatype.nexus.common.collect.NestedAttributesMap;
 import org.sonatype.nexus.repository.storage.MetadataNodeEntityAdapter;
 
-import com.synopsys.integration.bdio.model.Forge;
-import com.synopsys.integration.bdio.model.dependency.Dependency;
+import com.blackduck.integration.bdio.model.Forge;
+import com.blackduck.integration.bdio.model.dependency.Dependency;
 
 public class DependencyGeneratorTest {
 

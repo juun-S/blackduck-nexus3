@@ -1,8 +1,8 @@
-package com.synopsys.integration.blackduck.nexus3.mock;
+package com.blackduck.integration.blackduck.nexus3.mock;
 
-import com.synopsys.integration.blackduck.nexus3.database.QueryManager;
-import com.synopsys.integration.blackduck.nexus3.task.DateTimeParser;
-import com.synopsys.integration.blackduck.nexus3.task.common.CommonRepositoryTaskHelper;
+import com.blackduck.integration.blackduck.nexus3.database.QueryManager;
+import com.blackduck.integration.blackduck.nexus3.task.DateTimeParser;
+import com.blackduck.integration.blackduck.nexus3.task.common.CommonRepositoryTaskHelper;
 
 public class MockCommonRepositoryTaskHelper extends CommonRepositoryTaskHelper {
 

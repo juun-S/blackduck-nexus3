@@ -1,4 +1,4 @@
-package com.synopsys.integration.blackduck.nexus3.capability;
+package com.blackduck.integration.blackduck.nexus3.capability;
 
 import java.util.Collections;
 import java.util.Map;
@@ -9,7 +9,7 @@ import org.mockito.Mockito;
 import org.sonatype.goodies.testsupport.TestSupport;
 import org.sonatype.nexus.capability.CapabilityContext;
 
-import com.synopsys.integration.blackduck.nexus3.BlackDuckConnection;
+import com.blackduck.integration.blackduck.nexus3.BlackDuckConnection;
 
 public class BlackDuckCapabilityTest extends TestSupport {
 
